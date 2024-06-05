@@ -13,11 +13,6 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAll()
-    {
-        return 0;
-    }
-
     public function create(User $user): void
     {
         $this->_em->persist($user);

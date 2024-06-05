@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Request\LoginRequest;
-use App\Request\RegisterRequest;
+use App\Request\Auth\LoginRequest;
+use App\Request\Auth\RegisterRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,6 +40,7 @@ class AuthController extends AbstractController
         $security->login($user, 'json_login');
 
         return $this->json([
+            'id' => $user->getId(),
             'email' => $user->getEmail(),
         ]);
     }
