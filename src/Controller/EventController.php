@@ -10,6 +10,7 @@ use App\Request\Event\UpdateEventRequest;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends AbstractController
@@ -24,6 +25,18 @@ class EventController extends AbstractController
     public function index(): JsonResponse
     {
         $events = $this->eventRepository->findAll();
+
+        return $this->json($events);
+    }
+
+    #[Route('/event/range', name: 'app_event_range', methods: ['GET'])]
+    public function range(Request $request): JsonResponse
+    {
+        $year = $request->query->get('year');
+        $month = $request->query->get('month');
+        $userId = $request->query->get('user_id');
+
+        $events = $this->eventRepository->getByRangeAndUser($year, $month, $userId);
 
         return $this->json($events);
     }

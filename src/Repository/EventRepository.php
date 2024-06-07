@@ -13,6 +13,22 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function getByRangeAndUser(int $year, int $month, int $userId): array
+    {
+        $firstDay = date($year.'-'.$month.'-01');
+        $lastDay = date($year.'-'.$month.'-t');
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.date >= :firstDay')
+            ->andWhere('e.date <= :lastDay')
+            ->join('e.user', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('firstDay', $firstDay)
+            ->setParameter('lastDay', $lastDay)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function create(Event $event): void
     {
         $this->_em->persist($event);
